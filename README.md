@@ -1,2 +1,2 @@
 # ARM-64-bit-Pipelined-CPU-Design
-This project implements a 64-bit ARM CPU with pipelining
+This project implements a 64-bit ARM pipelined CPU capable of executing a defined subset of ARM instructions. The design includes a five-stage pipeline (Fetch, Decode, Execute, Memory, Writeback) with support for data forwarding and one-cycle delay slots after load and branch instructions. It builds upon previous components developed in earlier labs, including the register file, ALU, and single-cycle CPU. Key challenges addressed include handling write attempts to register X31 (which must always output zero), resolving data hazards through forwarding logic, and correctly managing pipeline control for various instruction formats. 
