@@ -1,0 +1,168 @@
+C:/Users/appup/Downloads/Lab4-469/mux2_1.sv {1 {vlog -work work -sv -stats=none C:/Users/appup/Downloads/Lab4-469/mux2_1.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module mux2_1
+
+Top level modules:
+	mux2_1
+
+} {} {}} C:/Users/appup/Downloads/Lab4-469/checkforZero.sv {1 {vlog -work work -sv -stats=none C:/Users/appup/Downloads/Lab4-469/checkforZero.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module checkforZero
+
+Top level modules:
+	checkforZero
+
+} {} {}} C:/Users/appup/Downloads/Lab4-469/decoder.sv {1 {vlog -work work -sv -stats=none C:/Users/appup/Downloads/Lab4-469/decoder.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module decoder
+
+Top level modules:
+	decoder
+
+} {} {}} C:/Users/appup/Downloads/Lab4-469/mux4_1.sv {1 {vlog -work work -sv -stats=none C:/Users/appup/Downloads/Lab4-469/mux4_1.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module mux4_1
+
+Top level modules:
+	mux4_1
+
+} {} {}} C:/Users/appup/Downloads/Lab4-469/datapath.sv {1 {vlog -work work -sv -stats=none C:/Users/appup/Downloads/Lab4-469/datapath.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module datapath
+
+Top level modules:
+	datapath
+
+} {} {}} C:/Users/appup/Downloads/Lab4-469/cpu_testbench.sv {1 {vlog -work work -sv -stats=none C:/Users/appup/Downloads/Lab4-469/cpu_testbench.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module cpu_testbench
+
+Top level modules:
+	cpu_testbench
+
+} {} {}} C:/Users/appup/Downloads/Lab4-469/mux32_1.sv {1 {vlog -work work -sv -stats=none C:/Users/appup/Downloads/Lab4-469/mux32_1.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module mux32_1
+
+Top level modules:
+	mux32_1
+
+} {} {}} C:/Users/appup/Downloads/Lab4-469/OneBitAdder.sv {1 {vlog -work work -sv -stats=none C:/Users/appup/Downloads/Lab4-469/OneBitAdder.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module OneBitAdder
+
+Top level modules:
+	OneBitAdder
+
+} {} {}} C:/Users/appup/Downloads/Lab4-469/math.sv {1 {vlog -work work -sv -stats=none C:/Users/appup/Downloads/Lab4-469/math.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module mult
+-- Compiling module shifter
+-- Compiling module shifter_testbench
+-- Compiling module mult_testbench
+
+Top level modules:
+	shifter_testbench
+	mult_testbench
+
+} {} {}} C:/Users/appup/Downloads/Lab4-469/alu.sv {1 {vlog -work work -sv -stats=none C:/Users/appup/Downloads/Lab4-469/alu.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module alu
+
+Top level modules:
+	alu
+
+} {} {}} C:/Users/appup/Downloads/Lab4-469/instructmem.sv {1 {vlog -work work -sv -stats=none C:/Users/appup/Downloads/Lab4-469/instructmem.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module instructmem
+-- Compiling module instructmem_testbench
+
+Top level modules:
+	instructmem_testbench
+
+} {} {}} C:/Users/appup/Downloads/Lab4-469/demux3_8.sv {1 {vlog -work work -sv -stats=none C:/Users/appup/Downloads/Lab4-469/demux3_8.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module demux3_8
+
+Top level modules:
+	demux3_8
+
+} {} {}} C:/Users/appup/Downloads/Lab4-469/register.sv {1 {vlog -work work -sv -stats=none C:/Users/appup/Downloads/Lab4-469/register.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module register
+
+Top level modules:
+	register
+
+} {} {}} C:/Users/appup/Downloads/Lab4-469/regfile.sv {1 {vlog -work work -sv -stats=none C:/Users/appup/Downloads/Lab4-469/regfile.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module regfile
+
+Top level modules:
+	regfile
+
+} {} {}} C:/Users/appup/Downloads/Lab4-469/D_FF.sv {1 {vlog -work work -sv -stats=none C:/Users/appup/Downloads/Lab4-469/D_FF.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module D_FF
+
+Top level modules:
+	D_FF
+
+} {} {}} C:/Users/appup/Downloads/Lab4-469/cpu.sv {1 {vlog -work work -sv -stats=none C:/Users/appup/Downloads/Lab4-469/cpu.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module cpu
+
+Top level modules:
+	cpu
+
+} {} {}} C:/Users/appup/Downloads/Lab4-469/demux2_4.sv {1 {vlog -work work -sv -stats=none C:/Users/appup/Downloads/Lab4-469/demux2_4.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module demux2_4
+
+Top level modules:
+	demux2_4
+
+} {} {}} C:/Users/appup/Downloads/Lab4-469/bitwiseOr.sv {1 {vlog -work work -sv -stats=none C:/Users/appup/Downloads/Lab4-469/bitwiseOr.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module bitwiseOr
+
+Top level modules:
+	bitwiseOr
+
+} {} {}} C:/Users/appup/Downloads/Lab4-469/bitwiseXor.sv {1 {vlog -work work -sv -stats=none C:/Users/appup/Downloads/Lab4-469/bitwiseXor.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module bitwiseXor
+
+Top level modules:
+	bitwiseXor
+
+} {} {}} C:/Users/appup/Downloads/Lab4-469/control.sv {1 {vlog -work work -sv -stats=none C:/Users/appup/Downloads/Lab4-469/control.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module control
+
+Top level modules:
+	control
+
+} {} {}} C:/Users/appup/Downloads/Lab4-469/datamem.sv {1 {vlog -work work -sv -stats=none C:/Users/appup/Downloads/Lab4-469/datamem.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module datamem
+-- Compiling module datamem_testbench
+
+Top level modules:
+	datamem_testbench
+
+} {} {}} C:/Users/appup/Downloads/Lab4-469/datapathPC.sv {1 {vlog -work work -sv -stats=none C:/Users/appup/Downloads/Lab4-469/datapathPC.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module datapathPC
+
+Top level modules:
+	datapathPC
+
+} {} {}} C:/Users/appup/Downloads/Lab4-469/bitwiseAnd.sv {1 {vlog -work work -sv -stats=none C:/Users/appup/Downloads/Lab4-469/bitwiseAnd.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module bitwiseAnd
+
+Top level modules:
+	bitwiseAnd
+
+} {} {}}

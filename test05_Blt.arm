@@ -1,0 +1,68 @@
+// Test of B.LT instruction.
+// Requires:
+// B.LT, SUBS, ADDI & B instructions
+// Expected results:
+// X0 =  1
+// X1 =  1
+
+//ADDI: I-type, Reg[Rd] = Reg[Rn] + {'0, Imm12}
+//OP         Imm12        Rn    Rd
+//3322222222 221111111111 00000 00000
+//1098765432 109876543210 98765 43210
+//1001000100 Unsigned     0..31 0..31
+
+//B: B-type, PC = PC + SignExtend({Imm26, 2'b00})
+//OP     Imm26
+//332222 22222211111111110000000000
+//109876 54321098765432109876543210
+//000101 2's Comp Imm26
+
+//SUBS: R-type, Reg[Rd] = Reg[Rn] - Reg[Rm]
+//OP          Rm    Shamt  Rn    Rd
+//33222222222 21111 111111 00000 00000
+//10987654321 09876 543210 98765 43210
+//11101011000 0..31 000000 0..31 0..31
+
+//B.cond: CB-type, if (flags meet condition) PC = PC + SignExtend({Imm19, 2'b00})
+//OP       Imm19               Cond
+//33222222 2222111111111100000 00000
+//10987654 3210987654321098765 43210
+//01010100 2's Comp Imm19      0..15
+//
+// Cond  Name Meaning after SUBS FlagTest
+// 00000 EQ    Equal           Z==1
+// 00001 NE    Not equal       Z==0
+// 00010 HS    Unsigned >=     C==1
+// 00011 LO    Unsigned <      C==0
+// 00100 MI    Minus           N==1
+// 00101 PL    Plus/0          N==0
+// 00110 VS    Overflow        V==1
+// 00111 VC    No Overflow     V==0
+// 01000 HI    Unsigned >      C==1 && Z==0
+// 01001 LS    Unsigned <=     C==0 || Z==1
+// 01010 GE    Signed >=       N==V
+// 01011 LT    Signed <        N!=V
+// 01100 GT    Signed >        Z==0 && N==V
+// 01101 LE    Signed <=       !(Z==0 && N==V)
+// 0111x AL    Alway     Always
+
+               // MAIN:
+1001000100_000000000001_11111_00000    // ADDI X0, X31, #1     // X0 = 1, comparison target.
+1001000100_000000000000_11111_00001    // ADDI X1, X31, #0     // X1 = 0, only set to 1 if we get it all right.
+11101011000_00000_000000_00000_11111   // SUBS X31, X0, X0     // 1-1, not less than.
+01010100_0000000000000001000_01011     // B.LT ERROR           // Don't take (+8)
+1001000100_000000000000_11111_11111    // ADDI X31, X31, #0    // NOOP
+11101011000_11111_000000_00000_11111   // SUBS X31, X0, X31    // 1 - 0, not less than.
+01010100_0000000000000000101_01011     // B.LT ERROR           // Don't take (+5)
+1001000100_000000000000_11111_11111    // ADDI X31, X31, #0    // NOOP
+11101011000_00000_000000_11111_11111   // SUBS X31, X31, X0    // 0 - 1, is less than.
+01010100_0000000000000000100_01011     // B.LT SUCCESS         // Take this. (+4)
+1001000100_000000000000_11111_11111    // ADDI X31, X31, #0    // NOOP
+               // ERROR:
+000101_00000000000000000000000000      // B ERROR              // Should never get here (0)
+1001000100_000000000000_11111_11111    // ADDI X31, X31, #0    // NOOP
+               // SUCCESS:
+1001000100_000000000001_00001_00001    // ADDI X1, X1, #1      // Signal correct operation.
+               // HALT:
+000101_00000000000000000000000000      // B HALT               // Loop forever (0).
+1001000100_000000000000_11111_11111    // ADDI X31, X31, #0    // NOOP

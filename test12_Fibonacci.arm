@@ -1,0 +1,127 @@
+// Test of a recursive Fibonacci function. Test "returns" the Nth number in the Fibonacci sequence.
+//
+// 
+
+//int fibonacci(int N) {
+//   if (N < 3) return 1;
+//   else return (fibonacci(N - 1) + fibonacci(N - 2));
+// 
+//}
+
+
+
+// Requires:
+// ADDI, B, B.LT, BL, BR, LDUR, STUR, & SUBS instructions
+// Expected results:
+// X0  = 6 (N)
+// X1  = 8 (Result of Fibonacci function with N = 6)
+// X28 = 8
+// X30 = 196
+
+//ADDI: I-type, Reg[Rd] = Reg[Rn] + {'0, Imm12}
+//OP         Imm12        Rn    Rd
+//3322222222 221111111111 00000 00000
+//1098765432 109876543210 98765 43210
+//1001000100 Unsigned     0..31 0..31
+
+//B: B-type, PC = PC + SignExtend({Imm26, 2'b00})
+//OP     Imm26
+//332222 22222211111111110000000000
+//109876 54321098765432109876543210
+//000101 2's Comp Imm26
+
+//B.cond: CB-type, if (flags meet condition) PC = PC + SignExtend({Imm19, 2'b00})
+//OP       Imm19               Cond
+//33222222 2222111111111100000 00000
+//10987654 3210987654321098765 43210
+//01010100 2's Comp Imm19      0..15
+// Cond  Name Meaning after SUBS FlagTest
+// 01011 LT   	Signed <     	 N!=V
+
+//BL: B-type, PC = PC + SignExtend({Imm26, 2'b00}), X30 = PC + 4
+//OP     Imm26
+//332222 22222211111111110000000000
+//109876 54321098765432109876543210
+//100101 2's Comp Imm26
+
+//BR: R-type, PC = Reg[Rd]
+//OP          Rm    Shamt  Rn    Rd
+//33222222222 21111 111111 00000 00000
+//10987654321 09876 543210 98765 43210
+//11010110000 0..31 000000 0..31 0..31
+
+//LDUR: D-type, Reg[Rt] = Mem[Reg[Rn] + SignExtend(Imm9)]
+//OP          Imm9      00 Rn    Rt
+//33222222222 211111111 11 00000 00000
+//10987654321 098765432 10 98765 43210
+//11111000010 2's Comp  00 0..31 0..31
+
+//STUR: D-type, Mem[Reg[Rn] + SignExtend(Imm9)] = Reg[Rt]
+//OP          Imm9      00 Rn    Rt
+//33222222222 211111111 11 00000 00000
+//10987654321 098765432 10 98765 43210
+//11111000000 2's Comp  00 0..31 0..31
+
+//SUBS: R-type, Reg[Rd] = Reg[Rn] - Reg[Rm]
+//OP          Rm    Shamt  Rn    Rd
+//33222222222 21111 111111 00000 00000
+//10987654321 09876 543210 98765 43210
+//11101011000 0..31 000000 0..31 0..31
+
+               //MAIN:
+1001000100_000000000110_11111_00000          // ADDI X0, X31, #6           // X0 = N = 6
+1001000100_000000000000_11111_00001          // ADDI X1, X31, #0           // X1 = 0            // RETURN REG
+1001000100_000000010000_11111_01010          // ADDI X10, X31, #16         // X10 = 16          // for stack pointer decrementing with no SUBI
+1001000100_000000000011_11111_01011          // ADDI X11, X31, #3          // X11 = 3           // for B.LT (N < 3)
+1001000100_000000000001_11111_01100          // ADDI X12, X31, #1          // X12 = 1
+1001000100_000000000010_11111_01101          // ADDI X13, X31, #2          // X13 = 2
+1001000100_000000000000_11111_11100          // ADDI X28, X31, #0          // X28 = 0           // STACK POINTER
+1001000100_000011000100_11111_11110          // ADDI X30, X31, #196        // X30 = END = 49*4  // RETURN ADDRESS
+1001000100_000000001000_11100_11100          // ADDI X28, X28, #8          // Increase stack pointer by 8.
+11111000000_000000000_00_11100_11110         // STUR X30, [X28, #0]        // Store current return address on stack.
+11111000000_111111000_00_11100_00000         // STUR X0, [X28, #-8]        // Store current N on stack.
+100101_00000000000000000000001000            // BL to FIBONACCI (+8)
+1001000100_000000000000_11111_11111          // ADDI X31, X31, #0          // NOOP
+11111000010_111111000_00_11100_00000         // LDUR X0, [X28, #-8]        // Retrieve N from stack.
+1001000100_000000000000_11111_11111          // ADDI X31, X31, #0          // NOOP
+11111000010_000000000_00_11100_11110         // LDUR X30, [X28, #0]        // Retrieve return address from stack.
+1001000100_000000000000_11111_11111          // ADDI X31, X31, #0          // NOOP
+11010110000_00000_000000_00000_11110         // BR X30 (RETURN)
+1001000100_000000000000_11111_11111          // ADDI X31, X31, #0          // NOOP
+               //FIBONACCI(N):
+11101011000_01011_000000_00000_11111         // SUBS X31, X0, X11          // X31 = X0 - X11
+01010100_0000000000000011010_01011           // B.LT to RESULT (+26)
+1001000100_000000000000_11111_11111          // ADDI X31, X31, #0          // NOOP
+               //FIBONACCI(N-2):
+1001000100_000000010000_11100_11100          // ADDI X28, X28, #16         // Increase stack pointer by 16.
+11111000000_000000000_00_11100_11110         // STUR X30, [X28, #0]        // Store current return address on stack.
+11111000000_111111000_00_11100_00000         // STUR X0, [X28, #-8]        // Store current N on stack.
+11101011000_01101_000000_00000_00000         // SUBS X0, X0, X13           // X0 = X0 - X13
+100101_11111111111111111111111001            // BL to FIBONACCI (-7)
+1001000100_000000000000_11111_11111          // ADDI X31, X31, #0          // NOOP
+11111000010_111111000_00_11100_00000         // LDUR X0, [X28, #-8]        // Retrieve N from stack.
+1001000100_000000000000_11111_11111          // ADDI X31, X31, #0          // NOOP
+11111000010_000000000_00_11100_11110         // LDUR X30, [X28, #0]        // Retrieve return address from stack.
+1001000100_000000000000_11111_11111          // ADDI X31, X31, #0          // NOOP
+11101011000_01010_000000_11100_11100         // SUBS X28, X28, X10         // Decrease stack pointer by 16.
+               //FIBONACCI(N-1):
+1001000100_000000010000_11100_11100          // ADDI X28, X28, #16         // Increase stack pointer by 16.
+11111000000_000000000_00_11100_11110         // STUR X30, [X28, #0]        // Store current return address on stack.
+11111000000_111111000_00_11100_00000         // STUR X0, [X28, #-8]        // Store current N on stack.
+11101011000_01100_000000_00000_00000         // SUBS X0, X0, X12           // X0 = X0 - X12
+100101_11111111111111111111101110            // BL to FIBONACCI (-18)
+1001000100_000000000000_11111_11111          // ADDI X31, X31, #0          // NOOP
+11111000010_111111000_00_11100_00000         // LDUR X0, [X28, #-8]        // Retrieve N from stack.
+1001000100_000000000000_11111_11111          // ADDI X31, X31, #0          // NOOP
+11111000010_000000000_00_11100_11110         // LDUR X30, [X28, #0]        // Retrieve return address from stack.
+1001000100_000000000000_11111_11111          // ADDI X31, X31, #0          // NOOP
+11101011000_01010_000000_11100_11100         // SUBS X28, X28, X10         // Decrease stack pointer by 16.
+11010110000_00000_000000_00000_11110         // BR X30 (RETURN)
+1001000100_000000000000_11111_11111          // ADDI X31, X31, #0          // NOOP
+               //RESULT:
+1001000100_000000000001_00001_00001          // ADDI X1, X1, #1            // X1 += 1
+11010110000_00000_000000_00000_11110         // BR X30 (RETURN)
+1001000100_000000000000_11111_11111          // ADDI X31, X31, #0          // NOOP
+               //END:
+000101_00000000000000000000000000            // B END (+0)
+1001000100_000000000000_11111_11111          // ADDI X31, X31, #0          // NOOP

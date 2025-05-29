@@ -1,0 +1,49 @@
+`timescale 1ns/10ps
+module datapathPC(clk, reset, instruction, pcVal, BrTaken, UncondBr); 
+	input clk, reset, BrTaken, UncondBr;
+	input	[31:0] instruction;
+	output [63:0] pcVal;
+	
+	logic [63:0] nextPC, shift2, nextPC1, nextPC0, pcVal_br;
+	logic negative1, zero1, overflow1, carry_out1;
+	logic negative0, zero0, overflow0, carry_out0;
+
+	// PC LOGIC AND FETCHING INSTRUCIONS: 
+	
+	logic [63:0] d0_signExt, d1_signExt;
+	assign d0_signExt = {{45{instruction[23]}}, instruction[23:5]};
+	assign d1_signExt = {{38{instruction[25]}}, instruction[25:0]};
+	genvar i;
+	generate
+		 for (i = 0; i < 64; i++) begin : mux_signExt
+			  mux2_1 mux_inst (.x(d0_signExt[i]),.y(d1_signExt[i]),.sel(UncondBr),.out(shift2[i]));
+		 end
+	endgenerate
+
+	// clocking the previous PC
+	
+	register incase_br (.WriteData(pcVal), .clk, .regEnable(1'b1), .dataOut(pcVal_br));
+	
+	// Get Adder output for PC = PC + SE(Br) * 4 -----> Save it into nextPC1
+	alu PCnextBr (.A(pcVal_br), .B({shift2[61:0], 2'b00}), .cntrl(3'b010), .result(nextPC1), .negative(negative1), .zero(zero1), .overflow(overflow1), .carry_out(carry_out1)); 
+	
+	// Get Adder output for PC = PC + 4 ----> Save to into nextPC0
+	alu PCnext4 (.A(pcVal), .B(64'd4), .cntrl(3'b010), .result(nextPC0), .negative(negative0), .zero(zero0), .overflow(overflow0), .carry_out(carry_out0)); 
+	
+	// Select between nextPC1 and nextPC0 depending on BrTaken signal ----> whether branch is taken or not  
+	genvar k;
+	generate
+    for (k = 0; k < 64; k++) begin : mux_assignPC
+        mux2_1 mux_inst2 (.x(nextPC0[k]),.y(nextPC1[k]),.sel(BrTaken),.out(nextPC[k]));
+    end
+endgenerate
+
+
+	// Initiate PC as 0 nextPC based on reset
+	genvar j; 
+	generate 
+		for(j = 0; j < 64; j++) begin : eachFlip
+			D_FF flipPC (.q(pcVal[j]), .d(nextPC[j]), .reset, .clk);
+		end
+	endgenerate 
+endmodule 

@@ -1,0 +1,34 @@
+`timescale 1ns/10ps
+module cpu(clk, reset);
+	input logic clk, reset;
+	
+	logic [31:0] instruction, pip_instruction, instruction_temp;
+	logic [63:0] pcVal, pc_val_pip;
+	logic Reg2Loc, ALUsrc, MemToReg, RegWrite, MemWrite, BrTaken, UncondBr, shift, direction, math, srcType, BrTaken_f, UncondBr_f;
+	logic [1:0] fwdr1, fwdr2;
+	logic [2:0] ALUop;
+	logic negative, zero, overflow, carry_out, zero_br, fwd_math; 
+	logic [4:0] Rd_e, Rn_r, Rd_m, Rd_r, Ab, Rm_r; 
+	
+	// Fetch PC (64-bit addr)
+	
+	datapathPC getPC (.clk, .reset, .instruction(pip_instruction), .pcVal, .BrTaken, .UncondBr); 
+	
+// PIPLINING - Instruction 
+	// Fetch instruction based on PC
+	instructmem getInstr (.address(pcVal), .instruction, .clk);
+	
+	genvar i; 
+
+	generate 
+		for (i = 0; i < 32; i++) begin : eachInstrPip
+			D_FF InstrPip (.q(pip_instruction[i]), .d(instruction[i]), .reset, .clk);
+		end
+	endgenerate 
+	
+//	// Set the control logic for each instruction 
+	control cntrl (.clk, .instruction(pip_instruction), .Reg2Loc, .ALUsrc, .MemToReg, .RegWrite, .MemWrite, .BrTaken, .UncondBr, .ALUop, .shift, .direction, .math, .srcType, .negative, .zero, .overflow, .carry_out, .fwdr1, .Rd_e, .Rn_r, .Rd_m, .Rd_r, .fwdr2, .Ab, .zero_br, .Rm_r, .fwd_math);
+
+	
+	datapath data (.clk, .reset, .instruction(pip_instruction), .Reg2Loc, .ALUsrc, .MemToReg, .RegWrite, .MemWrite, .ALUop, .shift, .direction, .math, .srcType, .negative, .zero, .overflow, .carry_out, .Rd_e, .Rn_r, .fwdr1, .Rd_m, .Rd_r, .Ab, .fwdr2, .zero_br, .Rm_r, .fwd_math); 
+endmodule 
